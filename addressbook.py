@@ -32,6 +32,7 @@ class AddressBook:
         self.status_label = Gtk.Label("")
 
         # Set up info bar
+        # TODO find out how to close the info bar. Close button functionality.
         self.info_bar = Gtk.InfoBar()
         self.info_bar.set_message_type(Gtk.MessageType.INFO)
         self.info_bar.get_content_area().pack_start(self.status_label, False, False, 0)

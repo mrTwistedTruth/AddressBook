@@ -25,9 +25,17 @@ class AddressBook:
         self.phone_entry.set_text('phone')
         # /* */--------------------
 
+
         # Set up display labels
         self.name_label = Gtk.Label("Name: ")
         self.phone_label = Gtk.Label("Phone: ")
+        self.status_label = Gtk.Label("")
+
+        # Set up info bar
+        self.info_bar = Gtk.InfoBar()
+        self.info_bar.set_message_type(Gtk.MessageType.INFO)
+        self.info_bar.get_content_area().pack_start(self.status_label, False, False, 0)
+        self.info_bar.set_show_close_button(True)
 
         # Set up buttons
         self.btn_addContact = Gtk.Button(label="Add Contact")
@@ -46,9 +54,12 @@ class AddressBook:
         box_main.pack_start(box_display, True, True, 0)
         box_main.pack_start(box_buttons, True, True, 0)
 
+
         box_entry.add(self.name_entry)
         box_entry.add(self.phone_entry)
 
+        box_display.add(self.info_bar)
+        box_display.add(self.status_label)
         box_display.add(self.name_label)
         box_display.add(self.phone_label)
 
@@ -60,7 +71,6 @@ class AddressBook:
         # /* */--------------------
 
         window.add(box_main)
-
         window.show_all()
 
     def Add_button_clicked(self, btn_add):
@@ -68,12 +78,17 @@ class AddressBook:
         contact.createNewPerson(contact.name, self.phone_entry.get_text())
         self.AB_dict[contact.name] = contact
 
+        self.phone_entry.set_text('') # Clear phone entry after contact added
+        self.status_label.set_text('Contact {0} Added.'.format(contact.name))
+
     def Display_button_clicked(self, btn_display):
         name = self.name_entry.get_text()
 
         number = str(self.AB_dict[name].getNumber())
         self.name_label.set_text(name)
         self.phone_label.set_text(number)
+    def on_bar_response(self, info_bar, response_id):
+        pass
 
     def destroy(self, window):
         Gtk.main_quit()

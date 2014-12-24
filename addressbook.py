@@ -14,8 +14,18 @@ class AddressBook:
         window.set_position(Gtk.WindowPosition.CENTER)
         #window.set_default_size(300, 300)
         window.connect("destroy", self.destroy)
+        window.set_border_width(8)
 
-        # Set up text entries
+        # Set up information entry area
+        entry_frame = Gtk.Frame(label="Entry")
+        box_main = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+        window.add(box_main)
+
+        box_main.add(entry_frame)
+
+        box_entry = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+        box_entry.set_border_width(8)
+
         self.name_entry = Gtk.Entry()
         self.name_entry.set_alignment(1)
         self.name_entry.set_text('name')
@@ -23,53 +33,55 @@ class AddressBook:
         self.phone_entry = Gtk.Entry()
         self.phone_entry.set_alignment(1)
         self.phone_entry.set_text('phone')
-        # /* */--------------------
 
+        box_entry.add(self.name_entry)
+        box_entry.add(self.phone_entry)
+        entry_frame.add(box_entry)
+        # /* */-------------------- End entry area
 
-        # Set up display labels
+        # Set up display area
+        display_frame = Gtk.Frame(label="Display")
+        box_main.add(display_frame)
+
+        box_display = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+        box_display.set_border_width(8)
+
         self.name_label = Gtk.Label("Name: ")
         self.phone_label = Gtk.Label("Phone: ")
         self.status_label = Gtk.Label("")
 
-        # Set up info bar
-        # TODO find out how to close the info bar. Close button functionality.
         self.info_bar = Gtk.InfoBar()
         self.info_bar.set_message_type(Gtk.MessageType.INFO)
         self.info_bar.get_content_area().pack_start(self.status_label, False, False, 0)
-        self.info_bar.set_show_close_button(True)
+        #self.info_bar.set_show_close_button(True)
 
-        # Set up buttons
+        box_display.add(self.name_label)
+        box_display.add(self.phone_label)
+        box_display.add(self.info_bar)
+
+        display_frame.add(box_display)
+
+        # /* */-------------------- End display area
+
+        # Set up button area
+        buttons_frame = Gtk.Frame(label="Buttons")
+        box_main.add(buttons_frame)
+
+        box_buttons = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
+        box_buttons.set_border_width(8)
+
+        buttons_frame.add(box_buttons)
+
         self.btn_addContact = Gtk.Button(label="Add Contact")
         self.btn_addContact.connect("clicked", self.Add_button_clicked)
 
         self.btn_displayContact = Gtk.Button(label="Display Contact")
         self.btn_displayContact.connect("clicked", self.Display_button_clicked)
 
-        # Set up layout boxes
-        box_main = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-        box_entry = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-        box_display = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-        box_buttons = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
-
-        box_main.pack_start(box_entry, True, True, 0)
-        box_main.pack_start(box_display, True, True, 0)
-        box_main.pack_start(box_buttons, True, True, 0)
-
-
-        box_entry.add(self.name_entry)
-        box_entry.add(self.phone_entry)
-
-        box_display.add(self.info_bar)
-        box_display.add(self.status_label)
-        box_display.add(self.name_label)
-        box_display.add(self.phone_label)
-
         box_buttons.add(self.btn_addContact)
         box_buttons.add(self.btn_displayContact)
-        #box_buttons.pack_start(self.btn_addContact, True, True, 0)
-        #box_buttons.pack_start(self.btn_displayContact, True, True, 0)
 
-        # /* */--------------------
+        # /* */-------------------- End buttons area
 
         window.add(box_main)
         window.show_all()

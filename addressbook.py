@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 from gi.repository import Gtk
+import os
 import person
+import pickle
 
 class AddressBook:
     def __init__(self):
@@ -103,6 +105,8 @@ class AddressBook:
         window.show_all()
 
     def Add_button_clicked(self, btn_add):
+        # TODO: Find out what happens if you add two contacts with
+        # the same key. Does the second replace the first?
         contact = person.Person(self.name_entry.get_text())
         contact.createNewPerson(contact.name, self.phone_entry.get_text())
         self.AB_dict[contact.name] = contact
@@ -141,10 +145,23 @@ class AddressBook:
             print(number)
 
     def Save_button_clicked(self, btn_saveAddressbook):
-        pass
+        file = open(self.AB_file, 'wb')
+        pickle.dump(self.AB_dict, file)
+        file.close()
+        self.status_label.set_text('Saved {0}'.format(self.AB_file))
+        print('Saved {0}'.format(self.AB_file))
 
     def Load_button_clicked(self, bnt_loadAddressbook):
-        pass
+        if os.path.exists(self.AB_file):
+            file = open(self.AB_file, 'rb')
+            self.AB_dict = pickle.load(file)
+            file.close()
+            self.status_label.set_text('Loaded {0}'.format(self.AB_file))
+            print('Loaded {0}'.format(self.AB_file))
+
+        else:
+            print('File {0} not found'.format(self.AB_file))
+            self.status_label.set_text('Save file not found. Unable to load')
 
     def on_bar_response(self, info_bar, response_id):
         pass

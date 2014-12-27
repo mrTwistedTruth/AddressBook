@@ -111,17 +111,35 @@ class AddressBook:
         self.status_label.set_text('Contact {0} Added.'.format(contact.name))
 
     def Edit_button_clicked(self, btn_editContact): # check second param
-        pass
+        name = self.name_entry.get_text()
+        newNumber = self.phone_entry.get_text()
+
+        self.AB_dict[name].updatePerson(newNumber)
+        self.status_label.set_text('{0}\'s number changed to {1}'.format(\
+                name, newNumber))
 
     def Delete_button_clicked(self, btn_deleteContact):
-        pass
+        name = self.name_entry.get_text()
+        self.AB_dict[name].__del__()
+        del self.AB_dict[name]
+        self.status_label.set_text('Contact {0} deleted from {1}'.format(\
+                name, self.AB_file))
 
     def Display_button_clicked(self, btn_displayContact): # Check second param
-        name = self.name_entry.get_text()
-
-        number = str(self.AB_dict[name].getNumber())
+        name = str(self.name_entry.get_text())
         self.name_label.set_text(name)
-        self.phone_label.set_text(number)
+
+        contact = self.AB_dict[name]
+        # TODO: Fix Display_button_clicked
+        if contact in self.AB_dict: # == True: # what is this returning?
+            number = str(self.AB_dict[name].getNumber())
+            self.phone_label.set_text(number)
+            print(number)
+        else:
+            self.phone_label.set_text('BLANK')
+            self.status_label.set_text('No contact named {0}'.format(name))
+
+        # If contact !exist display in info bar it doesn't exist
 
     def Save_button_clicked(self, btn_saveAddressbook):
         pass

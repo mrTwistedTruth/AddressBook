@@ -5,9 +5,10 @@ import person
 
 class AddressBook:
     def __init__(self):
+        # {{{1 ================= SET UP WINDOWS ================
         self.AB_dict = {}
         self.AB_file = 'addressbook.pkl'
-
+        #}}}1
         # Set up Window
         window = Gtk.Window()
         window.set_title("GTK AddressBook")
@@ -67,19 +68,34 @@ class AddressBook:
         buttons_frame = Gtk.Frame(label="Buttons")
         box_main.add(buttons_frame)
 
-        box_buttons = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 5)
-        box_buttons.set_border_width(8)
+        btn_addContact = Gtk.Button(label="Add Contact")
+        btn_addContact.connect("clicked", self.Add_button_clicked)
 
-        buttons_frame.add(box_buttons)
+        btn_editContact = Gtk.Button(label="Edit Contact")
+        btn_editContact.connect("clicked", self.Edit_button_clicked)
 
-        self.btn_addContact = Gtk.Button(label="Add Contact")
-        self.btn_addContact.connect("clicked", self.Add_button_clicked)
+        btn_deleteContact = Gtk.Button(label="Delete Contact")
+        btn_deleteContact.connect("clicked", self.Delete_button_clicked)
 
-        self.btn_displayContact = Gtk.Button(label="Display Contact")
-        self.btn_displayContact.connect("clicked", self.Display_button_clicked)
+        btn_displayContact = Gtk.Button(label="Display Contact")
+        btn_displayContact.connect("clicked", self.Display_button_clicked)
 
-        box_buttons.add(self.btn_addContact)
-        box_buttons.add(self.btn_displayContact)
+        btn_saveAddressbook = Gtk.Button(label="Save Addressbook")
+        btn_saveAddressbook.connect("clicked", self.Save_button_clicked)
+
+        btn_loadAddressbook = Gtk.Button(label="Load Addressbook")
+        btn_loadAddressbook.connect("clicked", self.Load_button_clicked)
+
+        grid_buttons = Gtk.Grid()
+
+        grid_buttons.add(btn_addContact)
+        grid_buttons.attach(btn_editContact, 1, 0, 1, 1)
+        grid_buttons.attach(btn_deleteContact, 2, 0, 1, 1)
+        grid_buttons.attach(btn_displayContact, 0, 1, 1, 1)
+        grid_buttons.attach(btn_saveAddressbook, 1, 1, 1, 1)
+        grid_buttons.attach(btn_loadAddressbook, 2, 1, 1, 1)
+
+        buttons_frame.add(grid_buttons)
 
         # /* */-------------------- End buttons area
 
@@ -94,12 +110,25 @@ class AddressBook:
         self.phone_entry.set_text('') # Clear phone entry after contact added
         self.status_label.set_text('Contact {0} Added.'.format(contact.name))
 
-    def Display_button_clicked(self, btn_display):
+    def Edit_button_clicked(self, btn_editContact): # check second param
+        pass
+
+    def Delete_button_clicked(self, btn_deleteContact):
+        pass
+
+    def Display_button_clicked(self, btn_displayContact): # Check second param
         name = self.name_entry.get_text()
 
         number = str(self.AB_dict[name].getNumber())
         self.name_label.set_text(name)
         self.phone_label.set_text(number)
+
+    def Save_button_clicked(self, btn_saveAddressbook):
+        pass
+
+    def Load_button_clicked(self, bnt_loadAddressbook):
+        pass
+
     def on_bar_response(self, info_bar, response_id):
         pass
 

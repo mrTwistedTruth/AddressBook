@@ -5,10 +5,10 @@ import person
 
 class AddressBook:
     def __init__(self):
-        # {{{1 ================= SET UP WINDOWS ================
+        # "{{1 ================= SET UP WINDOWS ================
         self.AB_dict = {}
         self.AB_file = 'addressbook.pkl'
-        #}}}1
+        # "}}}1
         # Set up Window
         window = Gtk.Window()
         window.set_title("GTK AddressBook")
@@ -120,7 +120,7 @@ class AddressBook:
 
     def Delete_button_clicked(self, btn_deleteContact):
         name = self.name_entry.get_text()
-        self.AB_dict[name].__del__()
+        #self.AB_dict[name].__del__()
         del self.AB_dict[name]
         self.status_label.set_text('Contact {0} deleted from {1}'.format(\
                 name, self.AB_file))
@@ -129,17 +129,16 @@ class AddressBook:
         name = str(self.name_entry.get_text())
         self.name_label.set_text(name)
 
-        contact = self.AB_dict[name]
-        # TODO: Fix Display_button_clicked
-        if contact in self.AB_dict: # == True: # what is this returning?
+        try:
+            contact = self.AB_dict[name]
+        except KeyError:
+            self.phone_label.set_text('BLANK')
+            self.status_label.set_text('No contact named {0}'.format(name))
+        else:
+            # No exception so contact exists
             number = str(self.AB_dict[name].getNumber())
             self.phone_label.set_text(number)
             print(number)
-        else:
-            self.phone_label.set_text('BLANK')
-            self.status_label.set_text('No contact named {0}'.format(name))
-
-        # If contact !exist display in info bar it doesn't exist
 
     def Save_button_clicked(self, btn_saveAddressbook):
         pass

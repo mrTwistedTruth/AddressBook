@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env python
 
 # Addressbook person.py
 
@@ -11,6 +11,8 @@ class Person():
 
     def __del__(self):
         print('Contact {0} is being deleted!'.format(self.name))
+        # Do I delete people from here, or from addressbook.py
+        # where AB_dict is?
 
     def getName(self):
         return self.name

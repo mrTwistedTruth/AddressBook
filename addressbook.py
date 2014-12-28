@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from gi.repository import Gtk
+from gi.repository import GdkPixbuf, Gtk
 import os
 import person
 import pickle
@@ -56,7 +56,10 @@ class AddressBook:
         self.info_bar = Gtk.InfoBar()
         self.info_bar.set_message_type(Gtk.MessageType.INFO)
         self.info_bar.get_content_area().pack_start(self.status_label, False, False, 0)
-        #self.info_bar.set_show_close_button(True)
+#        self.info_bar.set_no_show_all(True)
+        self.info_bar.connect('response', lambda a, b: Gtk.Widget.hide(a))
+
+        self.info_bar.set_show_close_button(True)
 
         box_display.add(self.name_label)
         box_display.add(self.phone_label)
@@ -113,6 +116,7 @@ class AddressBook:
 
         self.phone_entry.set_text('') # Clear phone entry after contact added
         self.status_label.set_text('Contact {0} Added.'.format(contact.name))
+        self.info_bar.show()
 
     def Edit_button_clicked(self, btn_editContact): # check second param
         name = self.name_entry.get_text()
@@ -121,6 +125,7 @@ class AddressBook:
         self.AB_dict[name].updatePerson(newNumber)
         self.status_label.set_text('{0}\'s number changed to {1}'.format(\
                 name, newNumber))
+        self.info_bar.show()
 
     def Delete_button_clicked(self, btn_deleteContact):
         name = self.name_entry.get_text()
@@ -128,6 +133,7 @@ class AddressBook:
         del self.AB_dict[name]
         self.status_label.set_text('Contact {0} deleted from {1}'.format(\
                 name, self.AB_file))
+        self.info_bar.show()
 
     def Display_button_clicked(self, btn_displayContact): # Check second param
         name = str(self.name_entry.get_text())
@@ -138,6 +144,7 @@ class AddressBook:
         except KeyError:
             self.phone_label.set_text('BLANK')
             self.status_label.set_text('No contact named {0}'.format(name))
+            self.info_bar.show()
         else:
             # No exception so contact exists
             number = str(self.AB_dict[name].getNumber())
@@ -150,6 +157,7 @@ class AddressBook:
         file.close()
         self.status_label.set_text('Saved {0}'.format(self.AB_file))
         print('Saved {0}'.format(self.AB_file))
+        self.info_bar.show()
 
     def Load_button_clicked(self, bnt_loadAddressbook):
         if os.path.exists(self.AB_file):
@@ -158,6 +166,7 @@ class AddressBook:
             file.close()
             self.status_label.set_text('Loaded {0}'.format(self.AB_file))
             print('Loaded {0}'.format(self.AB_file))
+            self.info_bar.show()
 
         else:
             print('File {0} not found'.format(self.AB_file))

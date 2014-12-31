@@ -7,10 +7,10 @@ import pickle
 
 class AddressBook:
     def __init__(self):
-        # "{{1 ================= SET UP WINDOWS ================
         self.AB_dict = {}
+        # TODO: Make addressbook.pkl the default save file but allow multiple
+        # save files with the option to give a name for save/load.
         self.AB_file = 'addressbook.pkl'
-        # "}}}1
         # Set up Window
         window = Gtk.Window()
         window.set_title("GTK AddressBook")
@@ -152,14 +152,36 @@ class AddressBook:
             print(number)
 
     def Save_button_clicked(self, btn_saveAddressbook):
-        file = open(self.AB_file, 'wb')
-        pickle.dump(self.AB_dict, file)
-        file.close()
-        self.status_label.set_text('Saved {0}'.format(self.AB_file))
-        print('Saved {0}'.format(self.AB_file))
-        self.info_bar.show()
+        # TODO: Fix save dialog
+        dialog = Gtk.FileChooserDialog("Please choose a file", self,
+                Gtk.FileChooserAction.OPEN,
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                    Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+        #dialog.set_modal()
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            self.AB_file = dialog.get_filename()
+            file = open(self.AB_file, 'wb')
+            pickle.dump(self.AB_dict, file)
+            file.close()
+            self.status_label.set_text('Saved {0}'.format(self.AB_file))
+            print('Saved {0}'.format(self.AB_file))
+            self.info_bar.show()
+        elif response == Gtk.ResponseType.CANCEL:
+            dialog.destroy()
+
+        dialog.destroy()
+
+
+#    def add_filters(self, dialog):
+        #filter_text = Gtk.FileFilter()
+        #filter_text.set_name("Pickle files")
+        #filter_text.add_mime_type("pickle/pkl")
+        #dialog.add_filter(filter_text)
 
     def Load_button_clicked(self, bnt_loadAddressbook):
+        # TODO: Add load dialog to get addressbook filename
         if os.path.exists(self.AB_file):
             file = open(self.AB_file, 'rb')
             self.AB_dict = pickle.load(file)

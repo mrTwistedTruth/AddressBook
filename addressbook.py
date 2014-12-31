@@ -8,8 +8,6 @@ import pickle
 class AddressBook:
     def __init__(self):
         self.AB_dict = {}
-        # TODO: Make addressbook.pkl the default save file but allow multiple
-        # save files with the option to give a name for save/load.
         self.AB_file = 'addressbook.pkl'
         # Set up Window
         self.window = Gtk.Window()
@@ -152,13 +150,11 @@ class AddressBook:
             print(number)
 
     def Save_button_clicked(self, btn_saveAddressbook):
-        # TODO: Fix save dialog
-        dialog = Gtk.FileChooserDialog("Please choose a file", self.window,
-                Gtk.FileChooserAction.OPEN,
+        dialog = Gtk.FileChooserDialog("Enter Save name and location", self.window,
+                Gtk.FileChooserAction.SAVE,
                 (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
-        #dialog.set_modal()
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             self.AB_file = dialog.get_filename()
@@ -181,21 +177,30 @@ class AddressBook:
         #dialog.add_filter(filter_text)
 
     def Load_button_clicked(self, bnt_loadAddressbook):
-        # TODO: Add load dialog to get addressbook filename
-        if os.path.exists(self.AB_file):
-            file = open(self.AB_file, 'rb')
-            self.AB_dict = pickle.load(file)
-            file.close()
-            self.status_label.set_text('Loaded {0}'.format(self.AB_file))
-            print('Loaded {0}'.format(self.AB_file))
-            self.info_bar.show()
+        dialog = Gtk.FileChooserDialog("Choose a file to load", self.window,
+                Gtk.FileChooserAction.OPEN,
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                    Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
+        dialog.set_current_folder(os.path.curdir)
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            self.AB_file = dialog.get_filename()
+            if os.path.exists(self.AB_file):
+                file = open(self.AB_file, 'rb')
+                self.AB_dict = pickle.load(file)
+                file.close()
+                self.status_label.set_text('Loaded {0}'.format(self.AB_file))
+                print('Loaded {0}'.format(self.AB_file))
+                self.info_bar.show()
+            else:
+                print('File {0} not found'.format(self.AB_file))
+                self.status_label.set_text('Save file not found. Unable to load')
         else:
-            print('File {0} not found'.format(self.AB_file))
-            self.status_label.set_text('Save file not found. Unable to load')
+            dialog.destroy()
 
-    def on_bar_response(self, info_bar, response_id):
-        pass
+#    def on_bar_response(self, info_bar, response_id):
+        #pass
 
     def destroy(self, window):
         Gtk.main_quit()

@@ -12,17 +12,17 @@ class AddressBook:
         # save files with the option to give a name for save/load.
         self.AB_file = 'addressbook.pkl'
         # Set up Window
-        window = Gtk.Window()
-        window.set_title("GTK AddressBook")
-        window.set_position(Gtk.WindowPosition.CENTER)
+        self.window = Gtk.Window()
+        self.window.set_title("GTK AddressBook")
+        self.window.set_position(Gtk.WindowPosition.CENTER)
         #window.set_default_size(300, 300)
-        window.connect("destroy", self.destroy)
-        window.set_border_width(8)
+        self.window.connect("destroy", self.destroy)
+        self.window.set_border_width(8)
 
         # Set up information entry area
         entry_frame = Gtk.Frame(label="Entry")
         box_main = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
-        window.add(box_main)
+        self.window.add(box_main)
 
         box_main.add(entry_frame)
 
@@ -104,8 +104,8 @@ class AddressBook:
 
         # /* */-------------------- End buttons area
 
-        window.add(box_main)
-        window.show_all()
+        self.window.add(box_main)
+        self.window.show_all()
 
     def Add_button_clicked(self, btn_add):
         # TODO: Find out what happens if you add two contacts with
@@ -153,7 +153,7 @@ class AddressBook:
 
     def Save_button_clicked(self, btn_saveAddressbook):
         # TODO: Fix save dialog
-        dialog = Gtk.FileChooserDialog("Please choose a file", self,
+        dialog = Gtk.FileChooserDialog("Please choose a file", self.window,
                 Gtk.FileChooserAction.OPEN,
                 (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
